@@ -1,0 +1,63 @@
+<a class="back" routerLink="/clients">Retour à la liste des clients</a>
+
+@if (customer(); as details) {
+  <h1>{{ details.companyName }}</h1>
+
+  <dl class="meta">
+    <div>
+      <dt>Numéro de TVA</dt>
+      <dd>{{ details.vatNumber }}</dd>
+    </div>
+    <div>
+      <dt>Ville</dt>
+      <dd>{{ details.city }}</dd>
+    </div>
+    <div>
+      <dt>Adresse e-mail</dt>
+      <dd><a href="mailto:{{ details.email }}">{{ details.email }}</a></dd>
+    </div>
+    <div>
+      <dt>Client depuis</dt>
+      <dd>{{ details.createdAt | date: 'dd/MM/yyyy' }}</dd>
+    </div>
+  </dl>
+
+  <h2>Commandes</h2>
+
+  @if (details.orders.length === 0) {
+    <p class="placeholder">Ce client n'a pas encore passé de commande.</p>
+  } @else {
+    <table class="table">
+      <thead>
+        <tr>
+          <th>N° de commande</th>
+          <th>Date</th>
+          <th>Statut</th>
+          <th class="table__num">Lignes</th>
+          <th class="table__num">Montant</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (order of details.orders; track order.id) {
+          <tr>
+            <td>
+              <a [routerLink]="['/commandes', order.id]">{{ order.id }}</a>
+            </td>
+            <td>{{ order.orderDate | date: 'dd/MM/yyyy' }}</td>
+            <td>
+              <span [class]="'badge badge--' + order.status.toLowerCase()">
+                {{ order.status | orderStatusLabel }}
+              </span>
+            </td>
+            <td class="table__num">{{ order.lineCount }}</td>
+            <td class="table__num">{{ order.total | currency: 'EUR' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+} @else if (notFound()) {
+  <p class="placeholder">Ce client est introuvable.</p>
+} @else {
+  <p class="placeholder">Chargement de la fiche client…</p>
+}

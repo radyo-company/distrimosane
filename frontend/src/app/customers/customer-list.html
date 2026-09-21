@@ -1,0 +1,50 @@
+<h1>Clients</h1>
+
+<div class="toolbar">
+  <input
+    #searchInput
+    type="search"
+    class="toolbar__search"
+    placeholder="Rechercher une société"
+    aria-label="Rechercher une société"
+    (input)="onSearch(searchInput.value)"
+  />
+  <span class="toolbar__count">{{ customers().length }} client(s)</span>
+</div>
+
+@if (loading()) {
+  <p class="placeholder">Chargement des clients…</p>
+} @else if (customers().length === 0) {
+  <p class="placeholder">Aucun client ne correspond à cette recherche.</p>
+} @else {
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Société</th>
+        <th>Ville</th>
+        <th class="table__num">Commandes</th>
+        <th class="table__num">Chiffre d'affaires</th>
+        <th>Dernière commande</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (customer of customers(); track customer.id) {
+        <tr>
+          <td>
+            <a [routerLink]="['/clients', customer.id]">{{ customer.companyName }}</a>
+          </td>
+          <td>{{ customer.city }}</td>
+          <td class="table__num">{{ customer.orderCount }}</td>
+          <td class="table__num">{{ customer.totalRevenue | currency: 'EUR' }}</td>
+          <td>
+            @if (customer.lastOrderDate) {
+              {{ customer.lastOrderDate | date: 'dd/MM/yyyy' }}
+            } @else {
+              <span class="muted">Aucune</span>
+            }
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}

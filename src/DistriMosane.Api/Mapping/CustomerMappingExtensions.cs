@@ -6,18 +6,20 @@ namespace DistriMosane.Api.Mapping;
 public static class CustomerMappingExtensions
 {
     public static CustomerListItemDto ToListItem(this Customer customer)
-    {
-        var orders = customer.Orders;
+{
+    var orders = customer.Orders
+        .Where(order => order.Status == OrderStatus.Delivered)
+        .ToList();
 
-        return new CustomerListItemDto(
-            customer.Id,
-            customer.CompanyName,
-            customer.VatNumber,
-            customer.City,
-            orders.Count,
-            orders.Sum(order => order.ComputeTotal()),
-            orders.Count == 0 ? null : orders.Max(order => order.OrderDate));
-    }
+    return new CustomerListItemDto(
+        customer.Id,
+        customer.CompanyName,
+        customer.VatNumber,
+        customer.City,
+        orders.Count,
+        orders.Sum(order => order.ComputeTotal()),
+        orders.Count == 0 ? null : orders.Max(order => order.OrderDate));
+}
 
     public static CustomerDetailDto ToDetail(this Customer customer)
     {

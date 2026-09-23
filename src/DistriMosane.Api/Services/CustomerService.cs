@@ -14,6 +14,7 @@ public class CustomerService(AppDbContext context) : ICustomerService
     {
         IQueryable<Customer> query = context.Customers
             .AsNoTracking()
+            .Where(customer => !customer.IsArchived)
             .Include(customer => customer.Orders)
                 .ThenInclude(order => order.Lines);
 

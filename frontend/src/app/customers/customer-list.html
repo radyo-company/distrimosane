@@ -28,7 +28,9 @@
       </tr>
     </thead>
     <tbody>
+          <h2>Clients Actifs:</h2>      
       @for (customer of customers(); track customer.id) {
+        @if (isActif(customer.lastOrderDate)) {
         <tr>
           <td>
             <a [routerLink]="['/clients', customer.id]">{{ customer.companyName }}</a>
@@ -43,8 +45,29 @@
               <span class="muted">Aucune</span>
             }
           </td>
-        </tr>
-      }
+        </tr>          
+        }
+      }   
+          <h2>Clients Inactifs:</h2>      
+      @for (customer of customers(); track customer.id) {
+        @if (!isActif(customer.lastOrderDate)) {
+        <tr>
+          <td>
+            <a [routerLink]="['/clients', customer.id]">{{ customer.companyName }}</a>
+          </td>
+          <td>{{ customer.city }}</td>
+          <td class="table__num">{{ customer.orderCount }}</td>
+          <td class="table__num">{{ customer.totalRevenue | currency: 'EUR' }}</td>
+          <td>
+            @if (customer.lastOrderDate) {
+              {{ customer.lastOrderDate | date: 'dd/MM/yyyy' }}
+            } @else {
+              <span class="muted">Aucune</span>
+            }
+          </td>
+        </tr>          
+        }
+      }   
     </tbody>
   </table>
 }

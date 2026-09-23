@@ -18,6 +18,13 @@ export class CustomerList {
   protected readonly customers = signal<CustomerListItem[]>([]);
   protected readonly loading = signal(true);
 
+  isActif(lastOrderDate: string | null) {
+
+    if (!lastOrderDate) return false;
+
+    return true;
+  }
+
   constructor() {
     this.searchTerm
       .pipe(

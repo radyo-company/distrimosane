@@ -29,4 +29,7 @@ public class CustomersController(ICustomerService customerService) : ControllerB
 
         return Ok(customer);
     }
+
+    [HttpPost]
+    
 }

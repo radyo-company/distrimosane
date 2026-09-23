@@ -84,8 +84,7 @@ public static class DatabaseSeeder
 
     private static Order BuildOrder(DateTime orderDate, DateTime today, Random random)
     {
-        var isBulkOrder = random.Next(8) == 0;
-        var lineCount = isBulkOrder ? random.Next(4, 9) : random.Next(1, 5);
+        var lineCount = random.Next(4, 9);
 
         var lines = new List<OrderLine>();
         var picked = new HashSet<int>();
@@ -99,9 +98,7 @@ public static class DatabaseSeeder
             }
 
             var (label, price) = Catalog[productIndex];
-            var quantity = isBulkOrder
-                ? random.Next(15, 61)
-                : random.Next(5) == 0 ? random.Next(10, 31) : random.Next(1, 9);
+            var quantity = random.Next(15, 61);
 
             lines.Add(new OrderLine
             {

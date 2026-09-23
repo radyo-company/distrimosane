@@ -8,7 +8,9 @@ public static class CustomerMappingExtensions
     public static CustomerListItemDto ToListItem(this Customer customer)
     {
 
-        var orders = customer.Orders.Where(o => o.Status == OrderStatus.Shipped || o.Status == OrderStatus.Delivered);
+        var orders = customer.Orders
+        .Where(o => o.Status == OrderStatus.Shipped || o.Status == OrderStatus.Delivered)
+        .ToList();
 
         return new CustomerListItemDto(
             customer.Id,

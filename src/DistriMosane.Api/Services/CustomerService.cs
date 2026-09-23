@@ -13,9 +13,10 @@ public class CustomerService(AppDbContext context) : ICustomerService
         CancellationToken cancellationToken = default)
     {
         IQueryable<Customer> query = context.Customers
-            .AsNoTracking()
-            .Include(customer => customer.Orders)
-                .ThenInclude(order => order.Lines);
+        .AsNoTracking()
+        .Include(customer => customer.Orders)
+            .ThenInclude(order => order.Lines)
+        .Where(customer => !customer.IsArchived);
 
         if (!string.IsNullOrWhiteSpace(search))
         {
